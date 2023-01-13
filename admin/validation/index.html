@@ -1,0 +1,153 @@
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
+
+<?php
+session_start();
+$allErrs = $nameErr = $emailErr = $contactnoErr = $cityErr = $typeOfSerrvicesErr = $allpostval = $allapproxbudget1 = $alltypeOfServices =  "" ;
+
+if(isset($_SESSION['errors'])){
+  $allErrs = $_SESSION['errors'];
+}
+if(isset($_SESSION['postval'])){
+  $allpostval =$_SESSION['postval'];
+}
+
+// if(isset($_SESSION['approxbudget1'])){
+//   $allapproxbudget1 =$_SESSION['approxbudget1'];
+// }
+
+if(isset($_SESSION['services'])){
+  $alltypeOfServices =$_SESSION['services'];
+}
+
+if(isset($allpostval['enquirysource'])){
+  $enquirysource=$allpostval['enquirysource'];
+
+}
+
+if (isset($allErrs['project'])) {
+  $projectErr = $allErrs['project'];
+}
+
+if(isset($allErrs['name'])){
+  $nameErr = $allErrs['name'];
+}
+
+if(isset($allErrs['email'])){
+  $emailErr = $allErrs['email'];
+}
+if(isset($allErrs['contactno'])){
+  $contactnoErr = $allErrs['contactno'];
+}
+if(isset($allErrs['city'])){
+  $cityErr = $allErrs['city'];
+}
+// if(isset($allErrs['location'])){
+//   $locationErr = $allErrs['location'];
+// }
+
+// if(isset($allErrs['enquirysource'])){
+//   $enquirysourceErr = $allErrs['enquirysource'];
+// }
+if(isset($allErrs['services'])){
+  $typeOfSerrvicesErr = $allErrs['services'];
+}
+
+
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation - </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <form method="post" action="send.php" class="form-horizontal" role="form" id="LaedsForm" >
+      <i class="fas fa-paper-plane"></i>
+      <span class="text-success"style="display: flex;justify-content: center;"><?php if($_SESSION['success']){echo $_SESSION['success'];} ?></span>
+      <div class="input-group">
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Enter your name"  id="contact_name" onkeyup="validatName()" >
+        <span id="name_error"><?php echo $nameErr; ?></span>
+      </div>
+
+      <div class="input-group">
+        <label>Phone No.</label>
+        <input type="tel" name="contactno" placeholder="123 456 7890" id="contact_phone" onkeyup="validatPhone()" >
+        <span id="phone_error"class="text-danger"><?php echo $contactnoErr; ?></span>
+      </div>
+
+      <div class="input-group">
+        <label>Email Id</label>
+        <input type="email" name="email" placeholder="Enter Email" id="contact_email" onkeyup="validatEmail()" >
+        <span id="email_error"class="text-danger"><?php echo $emailErr; ?></span>
+      </div>   
+      <br>
+      <div class="input-group">
+           <label class="">Services </label>
+           <!-- <div class="col-sm-6"> -->
+             <select  name="services[]" class="form-control" multiple="" >
+               <option value="">--Please choose an option--</option>
+               <option value="Trademark" <?php if(in_array('Trademark',$alltypeOfServices)) {  echo "selected";}else{echo "";}  ?>>Trademark</option>
+               <option value="Copyright" <?php if(in_array('Copyright',$alltypeOfServices)) {  echo "selected";}else{echo "";}  ?>>Copyright</option>
+               <option value="Patent" <?php if(in_array('Patent',$alltypeOfServices)) {  echo "selected";}else{echo "";}  ?>>Patent</option>
+               <option value="Company Formation" <?php if(in_array('Company Formation',$alltypeOfServices)) {  echo "selected";}else{echo "";}  ?>>Company Formation</option>
+               <option value="ISO" <?php if(in_array('ISO',$alltypeOfServices)) {  echo "selected";}else{echo "";}  ?>>ISO</option>
+               <option value="Website Design" <?php if(in_array('Website Design',$alltypeOfServices)) {  echo "selected";}else{echo "";}  ?>>Website Design</option>
+
+             </select>
+             <span class="text-danger"><?php echo $typeOfSerrvicesErr; ?></span>
+           <!-- </div> -->
+         </div>
+         <br>
+
+      <div class="input-group">
+        <label>City</label>
+        <input type="text" name="city" placeholder="Enter City name"  id="contact_name" onkeyup="validatCity()" >
+        <span id="city_error"class="text-danger"><?php echo $cityErr; ?></span>
+      </div>   
+         
+      <!-- <div class="input-group">
+        <label>Your Message</label>
+        <textarea rows="5" placeholder="Enter your message" id="contact_massage" onkeyup="validatMassage()"></textarea>
+        <span id="massage_error"></span>
+      </div> -->
+
+      <div class="input-group">
+        <!-- <label for="location" class="col-sm-3 control-label">Generate OTP:</label> -->
+        <!-- <div class="col-sm-12"> -->
+         <!-- <input type="text" id="otp" name="otp" placeholder="otp" class="form-control"  >
+         <span><strong>Note : </strong> Please Verify Mobile No. To submit the form. <a href="javascript:void(0)" onclick="SendOtp()">Verify</a></span>
+         <span class="text-danger"><?php echo $otpErr; ?></span> -->
+         <!-- <br>
+         <br> -->
+              <!-- <div   class="col-sm-12" > -->
+                <input id="button" type="submit" name="save" class="" value="Submit">
+              <!-- </div> -->
+
+       </div>
+
+    <!-- <button>Submit</button> -->
+    <span id="submit-error" id="contact_submit" onkeyup="validatSubmit()"></span>
+   
+  </form>
+  </div>
+    <script src="script.js"></script>
+</body>
+<?php 
+unset($_SESSION['errors']);
+unset($_SESSION['notmatched']);
+unset($_SESSION['postval']);
+unset($_SESSION['typeofflat1']);
+unset($_SESSION['approxbudget1']);
+session_destroy();
+
+?>
+</html>
